@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Playground Hub - Gerador de Imagens e Chat AI</title>
+    <meta name="description" content="Gere imagens incríveis com AI e converse com GPT-5 em um só lugar. Experimente nosso playground de inteligência artificial.">
+    <meta name="keywords" content="AI, gerador de imagens, chat GPT, inteligência artificial, playground AI">
+    <meta property="og:title" content="AI Playground Hub">
+    <meta property="og:description" content="Gere imagens e converse com IA em tempo real">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aiplaygroundhub.com">
+    <meta property="og:image" content="http://static.photos/technology/1200x630/42">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        .chat-bubble-user {
+            @apply bg-blue-500 text-white rounded-tr-none;
+        }
+        .chat-bubble-ai {
+            @apply bg-gray-200 text-gray-800 rounded-tl-none;
+        }
+        .disabled-feature {
+            @apply opacity-50 pointer-events-none;
+        }
+        #imageResult {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Banner de Cookies -->
+    <div id="cookieBanner" class="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50 hidden">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <p class="mb-4 md:mb-0 md:mr-4">Este site utiliza cookies essenciais. Você deve aceitar para usar todas as funcionalidades.</p>
+            <div class="flex space-x-2">
+                <button id="acceptCookies" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Aceitar</button>
+                <button id="declineCookies" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Recusar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-blue-600">AI Playground Hub <span class="text-blue-400">🎮</span></h1>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Início</a>
+                    <a href="privacy.html" class="text-gray-700 hover:text-blue-600 font-medium">Privacidade</a>
+                    <a href="terms.html" class="text-gray-700 hover:text-blue-600 font-medium">Termos</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-600 font-medium">Contato</a>
+                </nav>
+                <button class="md:hidden">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- AdSense Top -->
+    <div class="bg-gray-100 py-4 border-b">
+        <div class="container mx-auto px-4">
+            <div class="ad-placeholder h-20 flex items-center justify-center bg-gray-200 rounded">
+                <!-- AdSense Code Here -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-SEUCLIENTID"></script>
+                <!-- Top Banner -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-SEUCLIENTID"
+                     data-ad-slot="SEUADID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <!-- Image Generator Section -->
+        <section id="imageGenerator" class="mb-12 disabled-feature">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i data-feather="image" class="mr-2"></i> Gerador de Imagens AI
+                </h2>
+                
+                <div class="mb-4">
+                    <label for="imagePrompt" class="block text-sm font-medium text-gray-700 mb-2">Descreva a imagem que deseja gerar:</label>
+                    <textarea 
+                        id="imagePrompt" 
+                        rows="4" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Ex: Um gato astronauta no espaço com um fundo colorido"></textarea>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <button id="generateImageBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center">
+                        <i data-feather="zap" class="mr-2"></i> Gerar Imagem
+                    </button>
+                    <button id="downloadImageBtn" disabled class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center">
+                        <i data-feather="download" class="mr-2"></i> Baixar Imagem
+                    </button>
+                </div>
+                
+                <div class="mt-4">
+                    <div id="imageLoading" class="hidden text-center py-8">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p class="text-gray-600">Gerando sua imagem... Isso pode levar alguns segundos.</p>
+                    </div>
+                    <div id="imageError" class="hidden text-center py-4 bg-red-100 text-red-700 rounded-md"></div>
+                    <div id="imageResult" class="hidden rounded-md overflow-hidden border border-gray-200 bg-gray-100 flex items-center justify-center">
+                        <img id="generatedImage" class="max-w-full max-h-96 object-contain" alt="Imagem gerada por IA">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AdSense Middle -->
+        <div class="bg-gray-100 py-4 my-8 rounded-lg">
+            <div class="container mx-auto px-4">
+                <div class="ad-placeholder h-20 flex items-center justify-center bg-gray-200 rounded">
+                    <!-- AdSense Code Here -->
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-SEUCLIENTID"></script>
+                    <!-- Middle Banner -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-SEUCLIENTID"
+                         data-ad-slot="SEUADID"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat GPT Section -->
+        <section id="chatGpt" class="disabled-feature">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i data-feather="message-square" class="mr-2"></i> Chat GPT-5
+                </h2>
+                
+                <div id="chatContainer" class="mb-4 border border-gray-200 rounded-md p-4 bg-gray-50 h-96 overflow-y-auto">
+                    <div id="chatMessages" class="space-y-4">
+                        <div class="flex justify-start">
+                            <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-xs md:max-w-md lg:max-w-lg">
+                                <p>Olá! Sou o GPT-5. Como posso te ajudar hoje?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <textarea 
+                        id="chatInput" 
+                        rows="3" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Digite sua mensagem... (Pressione Enter para enviar, Shift+Enter para nova linha)"></textarea>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 mb-2">
+                    <button id="sendChatBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center">
+                        <i data-feather="send" class="mr-2"></i> Enviar
+                    </button>
+                    <button id="downloadChatBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center">
+                        <i data-feather="download" class="mr-2"></i> Baixar Conversa
+                    </button>
+                    <button id="copyChatBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md flex items-center">
+                        <i data-feather="copy" class="mr-2"></i> Copiar Texto
+                    </button>
+                </div>
+                
+                <div class="mt-2">
+                    <div id="chatLoading" class="hidden text-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                        <p class="text-gray-600">Pensando...</p>
+                    </div>
+                    <div id="chatError" class="hidden text-center py-2 bg-red-100 text-red-700 rounded-md"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AdSense Footer -->
+    <div class="bg-gray-100 py-4 border-t">
+        <div class="container mx-auto px-4">
+            <div class="ad-placeholder h-20 flex items-center justify-center bg-gray-200 rounded">
+                <!-- AdSense Code Here -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-SEUCLIENTID"></script>
+                <!-- Footer Banner -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-SEUCLIENTID"
+                     data-ad-slot="SEUADID"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">AI Playground Hub</h3>
+                    <p class="text-gray-400">Explore o poder da inteligência artificial para gerar imagens e conversar com modelos avançados de linguagem.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Política de Privacidade</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Termos de Uso</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contato</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Siga-nos</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 AI Playground Hub. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // Check for cookies consent
+        document.addEventListener('DOMContentLoaded', function() {
+            const cookieConsent = localStorage.getItem('cookieConsent');
+            const cookieBanner = document.getElementById('cookieBanner');
+            const acceptCookiesBtn = document.getElementById('acceptCookies');
+            const declineCookiesBtn = document.getElementById('declineCookies');
+            const disabledFeatures = document.querySelectorAll('.disabled-feature');
+            
+            if (cookieConsent === 'accepted') {
+                disabledFeatures.forEach(feature => feature.classList.remove('disabled-feature'));
+            } else {
+                cookieBanner.classList.remove('hidden');
+            }
+            
+            acceptCookiesBtn.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieBanner.classList.add('hidden');
+                disabledFeatures.forEach(feature => feature.classList.remove('disabled-feature'));
+            });
+            
+            declineCookiesBtn.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'declined');
+                cookieBanner.classList.add('hidden');
+            });
+            
+            // Image Generation
+            const generateImageBtn = document.getElementById('generateImageBtn');
+            const downloadImageBtn = document.getElementById('downloadImageBtn');
+            const imagePrompt = document.getElementById('imagePrompt');
+            const imageLoading = document.getElementById('imageLoading');
+            const imageError = document.getElementById('imageError');
+            const imageResult = document.getElementById('imageResult');
+            const generatedImage = document.getElementById('generatedImage');
+            
+            generateImageBtn.addEventListener('click', async function() {
+                const prompt = imagePrompt.value.trim();
+                
+                if (!prompt) {
+                    imageError.textContent = 'Por favor, digite uma descrição para a imagem.';
+                    imageError.classList.remove('hidden');
+                    return;
+                }
+                
+                imageError.classList.add('hidden');
+                imageResult.classList.add('hidden');
+                imageLoading.classList.remove('hidden');
+                generateImageBtn.disabled = true;
+                
+                try {
+                    // Using Puter AI to generate image
+                    const imgElement = await puter.ai.txt2img(prompt);
+                    
+                    generatedImage.src = imgElement.src;
+                    imageResult.classList.remove('hidden');
+                    downloadImageBtn.disabled = false;
+                } catch (error) {
+                    imageError.textContent = 'Ocorreu um erro ao gerar a imagem. Por favor, tente novamente.';
+                    imageError.classList.remove('hidden');
+                    console.error('Image generation error:', error);
+                } finally {
+                    imageLoading.classList.add('hidden');
+                    generateImageBtn.disabled = false;
+                }
+            });
+            
+            downloadImageBtn.addEventListener('click', function() {
+                if (!generatedImage.src) return;
+                
+                const link = document.createElement('a');
+                link.href = generatedImage.src;
+                link.download = `ai-generated-image-${Date.now()}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+            
+            // Chat GPT
+            const chatInput = document.getElementById('chatInput');
+            const sendChatBtn = document.getElementById('sendChatBtn');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatLoading = document.getElementById('chatLoading');
+            const chatError = document.getElementById('chatError');
+            const downloadChatBtn = document.getElementById('downloadChatBtn');
+            const copyChatBtn = document.getElementById('copyChatBtn');
+            
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            sendChatBtn.addEventListener('click', sendMessage);
+            
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                
+                if (!message) return;
+                
+                // Add user message to chat
+                addMessage(message, 'user');
+                chatInput.value = '';
+                
+                chatError.classList.add('hidden');
+                chatLoading.classList.remove('hidden');
+                sendChatBtn.disabled = true;
+                
+                try {
+                    // Using Puter AI to chat
+                    const response = await puter.ai.chat(message, { model: "gpt-5" });
+                    
+                    // Add AI response to chat
+                    addMessage(response, 'ai');
+                } catch (error) {
+                    chatError.textContent = 'Ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.';
+                    chatError.classList.remove('hidden');
+                    console.error('Chat error:', error);
+                } finally {
+                    chatLoading.classList.add('hidden');
+                    sendChatBtn.disabled = false;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+            
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = sender === 'user' 
+                    ? 'bg-blue-500 text-white p-3 rounded-lg max-w-xs md:max-w-md lg:max-w-lg rounded-br-none' 
+                    : 'bg-gray-200 text-gray-800 p-3 rounded-lg max-w-xs md:max-w-md lg:max-w-lg rounded-bl-none';
+                
+                bubbleDiv.textContent = text;
+                messageDiv.appendChild(bubbleDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            downloadChatBtn.addEventListener('click', function() {
+                const messages = Array.from(chatMessages.querySelectorAll('div > div'))
+                    .map(el => {
+                        const isUser = el.classList.contains('bg-blue-500');
+                        return `${isUser ? 'Você' : 'AI'}: ${el.textContent}`;
+                    })
+                    .join('\n\n');
+                
+                const blob = new Blob([messages], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `chat-conversation-${Date.now()}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+            
+            copyChatBtn.addEventListener('click', function() {
+                const messages = Array.from(chatMessages.querySelectorAll('div > div'))
+                    .map(el => {
+                        const isUser = el.classList.contains('bg-blue-500');
+                        return `${isUser ? 'Você' : 'AI'}: ${el.textContent}`;
+                    })
+                    .join('\n\n');
+                
+                navigator.clipboard.writeText(messages)
+                    .then(() => {
+                        const originalText = copyChatBtn.innerHTML;
+                        copyChatBtn.innerHTML = '<i data-feather="check" class="mr-2"></i> Copiado!';
+                        feather.replace();
+                        setTimeout(() => {
+                            copyChatBtn.innerHTML = originalText;
+                            feather.replace();
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
