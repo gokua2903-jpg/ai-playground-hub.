@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - AI Playground Hub</title>
+    <meta name="description" content="Entre em contato com a equipe do AI Playground Hub. Dúvidas, sugestões e feedback são sempre bem-vindos.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-blue-600">AI Playground Hub <span class="text-blue-400">🎮</span></h1>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium">Início</a>
+                    <a href="privacy.html" class="text-gray-700 hover:text-blue-600 font-medium">Privacidade</a>
+                    <a href="terms.html" class="text-gray-700 hover:text-blue-600 font-medium">Termos</a>
+                    <a href="#" class="text-blue-600 font-medium">Contato</a>
+                </nav>
+                <button class="md:hidden">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6 md:p-8 lg:p-10 max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Entre em Contato</h1>
+            <p class="text-gray-600 mb-8">Tem dúvidas, sugestões ou feedback? Preencha o formulário abaixo e entraremos em contato o mais breve possível.</p>
+            
+            <form id="contactForm" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Seu Nome</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Seu Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Assunto</label>
+                    <select 
+                        id="subject" 
+                        name="subject"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="question">Dúvida</option>
+                        <option value="suggestion">Sugestão</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Mensagem</label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        rows="5" 
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                
+                <div class="flex items-center">
+                    <input 
+                        type="checkbox" 
+                        id="agreeTerms" 
+                        name="agreeTerms" 
+                        required
+                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="agreeTerms" class="ml-2 block text-sm text-gray-600">
+                        Concordo com a coleta e processamento dos meus dados de acordo com a <a href="privacy.html" class="text-blue-600 hover:underline">Política de Privacidade</a>
+                    </label>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button 
+                        type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md flex items-center">
+                        <i data-feather="send" class="mr-2"></i> Enviar Mensagem
+                    </button>
+                </div>
+                
+                <div id="formSuccess" class="hidden p-4 bg-green-100 text-green-700 rounded-md">
+                    Mensagem enviada com sucesso! Entraremos em contato em breve.
+                </div>
+                
+                <div id="formError" class="hidden p-4 bg-red-100 text-red-700 rounded-md"></div>
+            </form>
+            
+            <div class="mt-12 border-t border-gray-200 pt-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Outras Formas de Contato</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i data-feather="mail" class="text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 mb-1">Email</h3>
+                            <p class="text-gray-600">contato@aiplaygroundhub.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i data-feather="twitter" class="text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 mb-1">Twitter</h3>
+                            <p class="text-gray-600">@aiplaygroundhub</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">AI Playground Hub</h3>
+                    <p class="text-gray-400">Explore o poder da inteligência artificial para gerar imagens e conversar com modelos avançados de linguagem.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Início</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacidade</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Termos de Uso</a></li>
+                        <li><a href="#" class="text-white">Contato</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Siga-nos</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 AI Playground Hub. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+        
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formSuccess = document.getElementById('formSuccess');
+            const formError = document.getElementById('formError');
+            
+            // Simulate form submission (in a real app, you would send to a server)
+            formSuccess.classList.remove('hidden');
+            formError.classList.add('hidden');
+            
+            // Reset form
+            this.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                formSuccess.classList.add('hidden');
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
